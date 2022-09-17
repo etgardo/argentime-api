@@ -77,3 +77,7 @@ Nest is an MIT-licensed open source project. It can grow thanks to the sponsors 
 ## License
 
 Nest is [MIT licensed](LICENSE).
+- https://github.com/nestjs/nest/issues/2249
+- https://blog.devgenius.io/environment-variables-in-nest-js-b989bb0370bf
+- https://github.com/nestjsx/nestjs-config#using-different-env-files
+- https://www.elvisduru.com/blog/nestjs-jwt-authentication-refresh-token

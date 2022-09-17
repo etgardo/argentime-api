@@ -3,6 +3,7 @@ import { Logger } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import { AppModule } from '@app.module';
 import { requestMessages, envNamesConf } from '@_constants';
+import { setDefaultAdmin } from '@config';
 
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
@@ -11,6 +12,7 @@ async function bootstrap() {
   const ENV = process.env.NODE_ENV;
   const port =
     parseInt(config.get<string>(envNamesConf.SERVER_PORT), 10) || 3000;
+  setDefaultAdmin(config);
   await app.listen(port);
   logger.log(
     `${requestMessages.SERVER_RUNNIG} ${await app.getUrl()} (Env ${
