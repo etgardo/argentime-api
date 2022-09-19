@@ -20,7 +20,8 @@
     "paths": {
       "@*": ["src/*"],
       "@decorators": ["src/common/decorators"],
-      "@helpers": ["src/common/helpers"]
+      "@helpers": ["src/common/helpers"],
+      "@middlewares": ["src/common/middlewares"]
     }
   }
 }

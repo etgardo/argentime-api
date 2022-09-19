@@ -1,7 +1,12 @@
-import { InternalServerErrorException, Module } from '@nestjs/common';
+import {
+  InternalServerErrorException,
+  Module,
+  NestModule,
+} from '@nestjs/common';
 import { ConfigModule, ConfigService } from '@nestjs/config';
-import { AppController } from '@app.controller';
+import { MiddlewareConsumer } from '@nestjs/common/interfaces';
 import { TypeOrmModule } from '@nestjs/typeorm';
+import { AppController } from '@app.controller';
 import { resolve } from 'path';
 import { existsSync } from 'fs';
 import { CategoriesModule } from './categories/categories.module';
@@ -12,6 +17,7 @@ import { BannersModule } from './banners/banners.module';
 import { CheckoutModule } from './checkout/checkout.module';
 import { AdminsModule } from './admins/admins.module';
 import { envNamesConf } from '@_constants';
+import { LoggerMiddleware } from '@middlewares';
 
 const ENV = process.env.NODE_ENV;
 const envFilePath = resolve(
@@ -60,4 +66,8 @@ if (!existsSync(envFilePath))
   controllers: [AppController],
   providers: [],
 })
-export class AppModule {}
+export class AppModule implements NestModule {
+  configure(consumer: MiddlewareConsumer) {
+    consumer.apply(LoggerMiddleware).forRoutes('*');
+  }
+}
