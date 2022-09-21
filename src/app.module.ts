@@ -9,15 +9,9 @@ import { TypeOrmModule } from '@nestjs/typeorm';
 import { AppController } from '@app.controller';
 import { resolve } from 'path';
 import { existsSync } from 'fs';
-import { CategoriesModule } from './categories/categories.module';
-import { SuscribersModule } from './suscribers/suscribers.module';
-import { ArticlesModule } from './articles/articles.module';
-import { CommentsModule } from './comments/comments.module';
-import { BannersModule } from './banners/banners.module';
-import { CheckoutModule } from './checkout/checkout.module';
-import { AdminsModule } from './admins/admins.module';
 import { envNamesConf } from '@_constants';
 import { LoggerMiddleware } from '@middlewares';
+import { AuthModule } from '@mod-auth/auth.module';
 
 const ENV = process.env.NODE_ENV;
 const envFilePath = resolve(
@@ -55,13 +49,7 @@ if (!existsSync(envFilePath))
         logger: 'file',
       }),
     }),
-    CategoriesModule,
-    SuscribersModule,
-    ArticlesModule,
-    CommentsModule,
-    BannersModule,
-    CheckoutModule,
-    AdminsModule,
+    AuthModule,
   ],
   controllers: [AppController],
   providers: [],

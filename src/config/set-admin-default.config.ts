@@ -1,7 +1,7 @@
 import { ConfigService } from '@nestjs/config';
 import { envNamesConf, requestMessages } from '@_constants';
 import { DataSource } from 'typeorm';
-import { AdminEntity } from '@admins/entities/admin.entity';
+import { AdminEntity } from '@mod-admins/entities';
 
 export const setDefaultAdmin = async (config: ConfigService) => {
   const dataSource = new DataSource({

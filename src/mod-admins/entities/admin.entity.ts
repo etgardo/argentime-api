@@ -9,18 +9,13 @@ import {
 } from 'typeorm';
 import { hash } from 'bcryptjs';
 
-@Entity('suscribers')
-export class SuscriberEntity extends UserEntity {
-  @Column({
-    name: 'suscription_type',
-    type: 'varchar',
-    length: 20,
-    nullable: false,
-  })
-  suscriptionType!: string;
+@Entity('admins') //This decorator tells TYPEORM to automatically create the table "admins" in database
+export class AdminEntity extends UserEntity {
+  @Column({ type: 'simple-array', nullable: false })
+  roles: string[];
 
-  @Column({ name: 'suscription_expire', type: 'timestamp' })
-  suscriptionExpire: Date;
+  @Column({ type: 'bool', default: true })
+  status: boolean;
 
   @CreateDateColumn({ name: 'created', type: 'timestamp' })
   createdAt: Date;

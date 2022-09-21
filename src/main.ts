@@ -1,5 +1,5 @@
 import { NestFactory } from '@nestjs/core';
-import { Logger } from '@nestjs/common';
+import { Logger, ValidationPipe } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 /*import {
   utilities as nestWinstonModuleUtilities,
@@ -27,6 +27,11 @@ async function bootstrap() {
   const port =
     parseInt(config.get<string>(envNamesConf.SERVER_PORT), 10) || 3000;
   setDefaultAdmin(config);
+  app.useGlobalPipes(
+    new ValidationPipe({
+      whitelist: true, //Al recibir los parametros posto o cualquier solo toma los propiedades definidas en dl DTO
+    }),
+  );
   await app.listen(port);
   logger.log(
     `${requestMessages.SERVER_RUNNIG} ${await app.getUrl()} (Env ${

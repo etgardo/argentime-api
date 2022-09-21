@@ -19,4 +19,8 @@ export const requestMessages = {
   SERVER_RUNNIG: 'Server is running in',
   ACCESS_DENIED: 'Access Denied',
   ALL_ACCESS_BLOCKED: 'Todos los accesos están bloqueados',
+  SUCCESS_LOGIN: 'Success Login',
+  SUCCESS_REQUEST: 'Success Request',
+  NOT_AUTHORIZED_TO_LOGIN:
+    'El tipo de usuario no está autorizado para hacer login, los tipos de usuarios permitidos son: ',
 };
