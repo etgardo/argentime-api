@@ -1,11 +1,18 @@
-import { Injectable } from '@nestjs/common';
-import { compare } from 'bcryptjs';
+import { ForbiddenException, Injectable } from '@nestjs/common';
+import { ConfigService } from '@nestjs/config';
+import { JwtService } from '@nestjs/jwt';
+import { compare, hash } from 'bcryptjs';
 import { UsersService } from '@mod-users';
 import { UserEntity } from '@mod-users/entities';
+import { envNamesConf, requestMessages } from '@_constants';
 
 @Injectable()
 export class AuthService {
-  constructor(private readonly usersService: UsersService) {}
+  constructor(
+    private readonly usersService: UsersService,
+    private readonly jwtService: JwtService,
+    private configService: ConfigService,
+  ) {}
 
   async validateUser(
     email: string,
@@ -21,11 +28,17 @@ export class AuthService {
     return null;
   }
 
-  async login(admin: UserEntity, typeUser: string) {
-    const { id } = admin;
+  async login(user: UserEntity, typeUser: string) {
+    const { id } = user;
     //const payload = { sub: id };
     const tokens = await this.getTokens(id);
+    user.refreshToken = await this.updateRefreshToken(
+      id,
+      tokens.refreshToken,
+      typeUser,
+    );
     return {
+      user,
       //accessToken: this.jwtService.sign(payload), //cuando solo se generaba un token
       accessToken: tokens.accessToken,
       refreshToken: tokens.refreshToken,
@@ -34,9 +47,52 @@ export class AuthService {
   }
 
   async getTokens(userId: number) {
+    const [accessToken, refreshToken] = await Promise.all([
+      this.jwtService.signAsync(
+        {
+          sub: userId,
+        },
+        {
+          secret: this.configService.get<string>(
+            envNamesConf.JWT_ACCESS_TOKEN_SECRET,
+          ),
+          expiresIn: this.configService.get<string>(
+            envNamesConf.JWT_ACCESS_TOKEN_EXPIRE,
+          ),
+        },
+      ),
+      this.jwtService.signAsync(
+        {
+          sub: userId,
+        },
+        {
+          secret: this.configService.get<string>(
+            envNamesConf.JWT_REFRESH_TOKEN_SECRET,
+          ),
+          expiresIn: this.configService.get<string>(
+            envNamesConf.JWT_REFRESH_TOKEN_EXPIRE,
+          ),
+        },
+      ),
+    ]);
+
     return {
-      accessToken: 'accessToken-' + userId,
-      refreshToken: 'refreshToken-' + userId,
+      accessToken,
+      refreshToken,
     };
+  }
+
+  async updateRefreshToken(
+    userId: number,
+    refreshToken: string,
+    typeUser: string,
+  ) {
+    const hashToken = await hash(refreshToken, 10);
+    const userUpdated = await this.usersService.updateRefreshToken(
+      userId,
+      hashToken,
+      typeUser,
+    );
+    return userUpdated.refreshToken;
   }
 }
