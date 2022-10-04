@@ -1,3 +1,4 @@
+import { APP_GUARD } from '@nestjs/core';
 import {
   InternalServerErrorException,
   Module,
@@ -6,12 +7,13 @@ import {
 import { ConfigModule, ConfigService } from '@nestjs/config';
 import { MiddlewareConsumer } from '@nestjs/common/interfaces';
 import { TypeOrmModule } from '@nestjs/typeorm';
-import { AppController } from '@app.controller';
 import { resolve } from 'path';
 import { existsSync } from 'fs';
-import { envNamesConf } from '@_constants';
+import { AppController } from '@app.controller';
 import { LoggerMiddleware } from '@middlewares';
 import { AuthModule } from '@mod-auth/auth.module';
+import { JwtAuthGuard } from '@mod-auth/guards';
+import { envNamesConf } from '@_constants';
 
 const ENV = process.env.NODE_ENV;
 const envFilePath = resolve(
@@ -52,7 +54,12 @@ if (!existsSync(envFilePath))
     AuthModule,
   ],
   controllers: [AppController],
-  providers: [],
+  providers: [
+    {
+      provide: APP_GUARD,
+      useClass: JwtAuthGuard,
+    },
+  ],
 })
 export class AppModule implements NestModule {
   configure(consumer: MiddlewareConsumer) {

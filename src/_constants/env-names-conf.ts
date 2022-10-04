@@ -16,3 +16,7 @@ export const envNamesConf = {
   DEFAULT_ADMIN_PASSWORD: 'DEFAULT_ADMIN_PASSWORD',
   DEFAULT_ADMIN_ROLE: 'DEFAULT_ADMIN_ROLE',
 };
+
+export const configVars = {
+  API_DOCS_URI: '/api-docs',
+};

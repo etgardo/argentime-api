@@ -9,6 +9,7 @@ export const validationMessages = {
   PASSWORD_NOT_EMPTY: 'El campo de contraseña es requerido',
   ADMIN_EXIST_WITH_EMAIL: 'Ya existe un admin con el mismo email',
   SLUG_NOT_EMPTY: 'El campo slug no puede ser vacio',
+  USER_TYPE_MUST_BE: 'El tipo de usuario de usuario debe ser de tipo',
 };
 
 export const requestMessages = {
@@ -23,4 +24,10 @@ export const requestMessages = {
   SUCCESS_REQUEST: 'Success Request',
   NOT_AUTHORIZED_TO_LOGIN:
     'El tipo de usuario no está autorizado para hacer login, los tipos de usuarios permitidos son: ',
+};
+
+export const appTexts = {
+  API_TITLE: 'Argentime API',
+  API_DESCRIPTION:
+    'Esta es un API creada con NestJS para acceder a recursos de la base de datos de ARGENTIMA',
 };

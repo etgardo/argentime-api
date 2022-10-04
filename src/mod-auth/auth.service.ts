@@ -31,7 +31,7 @@ export class AuthService {
   async login(user: UserEntity, typeUser: string) {
     const { id } = user;
     //const payload = { sub: id };
-    const tokens = await this.getTokens(id);
+    const tokens = await this.getTokens(id, typeUser);
     user.refreshToken = await this.updateRefreshToken(
       id,
       tokens.refreshToken,
@@ -46,11 +46,12 @@ export class AuthService {
     };
   }
 
-  async getTokens(userId: number) {
+  async getTokens(userId: number, typeUser: string) {
     const [accessToken, refreshToken] = await Promise.all([
       this.jwtService.signAsync(
         {
           sub: userId,
+          user: typeUser,
         },
         {
           secret: this.configService.get<string>(
@@ -64,6 +65,7 @@ export class AuthService {
       this.jwtService.signAsync(
         {
           sub: userId,
+          user: typeUser,
         },
         {
           secret: this.configService.get<string>(

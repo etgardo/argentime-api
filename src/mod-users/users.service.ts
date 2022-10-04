@@ -32,13 +32,21 @@ export class UsersService {
       userUpdated = await this.adminsService.update(userId, {
         refreshToken,
       });
-    else if (typeUser === 'suscriber') {
+    else if (typeUser === 'suscriber')
       userUpdated = await this.suscribersService.update(userId, {
         refreshToken,
       });
-    }
+
     if (!userUpdated)
       throw new NotFoundException(requestMessages.DOES_NOT_EXISTS);
     return userUpdated;
+  }
+
+  async findOne(id: number, typeUser: string): Promise<UserEntity> {
+    let user: UserEntity;
+    if (typeUser === 'admin') user = await this.adminsService.findOne(id);
+    else if (typeUser === 'suscriber')
+      user = await this.suscribersService.findOne(id);
+    return user;
   }
 }

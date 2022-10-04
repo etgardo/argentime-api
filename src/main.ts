@@ -11,6 +11,7 @@ import * as winston from 'winston';*/
 import { AppModule } from '@app.module';
 import { requestMessages, envNamesConf } from '@_constants';
 import { setDefaultAdmin } from '@config';
+import { initSwagger } from './app.swagger';
 
 //const logtail = new Logtail('ZaVvwyjaJ2M34yih43Zng9Zm');
 
@@ -26,6 +27,7 @@ async function bootstrap() {
   const ENV = process.env.NODE_ENV;
   const port =
     parseInt(config.get<string>(envNamesConf.SERVER_PORT), 10) || 3000;
+  initSwagger(app);
   setDefaultAdmin(config);
   app.useGlobalPipes(
     new ValidationPipe({
